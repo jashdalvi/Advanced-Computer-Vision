@@ -63,7 +63,7 @@ while True:
     points_detected_curr = np.array(points_detected_curr,dtype = np.float32).reshape(-1,2)
 
     eye_distance = int(cv2.norm(points_detected_curr[36] - points_detected_curr[45]))
-    sigma = eye_distance * eye_distance / 1600
+    sigma = eye_distance * eye_distance / 400
     s = 2*int(eye_distance/4)+1
 
     #  Set up optical flow params
@@ -86,12 +86,12 @@ while True:
             cv2.circle(frame,(int(points[i][0]),int(points[i][1])),3,(255,0,0),-1)
     else:
         for i in range(len(points)):
-            cv2.circle(frame,(int(points_detected_curr[i][0]),int(points_detected_curr[i][1])),2,(0,255,0),-1)
+            cv2.circle(frame,(int(points_detected_curr[i][0]),int(points_detected_curr[i][1])),3,(0,255,0),-1)
 
 
     fps = cv2.getTickFrequency()/(cv2.getTickCount() - start_time)
     cv2.putText(frame,"FPS : {:.3f}".format(fps),(10,25),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,0,255),2,cv2.LINE_AA)
-    points_detected_prev = points_detected_curr.copy()
+    points_detected_prev = points.copy()
     prev_frame_gray = frame_gray.copy()
     frame_num += 1
     cv2.imshow("Frame",frame)

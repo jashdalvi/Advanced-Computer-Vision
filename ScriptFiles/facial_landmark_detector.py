@@ -59,9 +59,9 @@ while cap.isOpened():
                             int(face_rects[i].right()),
                             int(face_rects[i].bottom()))
 
-        landmarks = landmark_detector(frame,rect)
+        landmarks = landmark_detector(frame_rgb,rect)
 
-        draw_landmarks(frame,landmarks)
+        draw_points(frame,landmarks)
 
     fps_lib = 1/(time.time() - start_time_lib)
     fps = cv2.getTickFrequency()/(cv2.getTickCount() - start_time)

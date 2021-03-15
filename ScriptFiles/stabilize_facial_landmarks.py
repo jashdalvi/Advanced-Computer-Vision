@@ -56,11 +56,13 @@ while True:
 
     if frame_num == 0:
         points_detected_prev = points_detected
+        points_arr = points_detected
     
     points_detected_curr = points_detected
 
     points_detected_prev = np.array(points_detected_prev,dtype = np.float32).reshape(-1,2)
     points_detected_curr = np.array(points_detected_curr,dtype = np.float32).reshape(-1,2)
+    points_arr = np.array(points_arr,dtype = np.float32).reshape(-1,2)
 
     eye_distance = int(cv2.norm(points_detected_curr[36] - points_detected_curr[45]))
     sigma = eye_distance * eye_distance / 400
@@ -69,7 +71,7 @@ while True:
     #  Set up optical flow params
     lk_params = dict(winSize  = (s, s), maxLevel = 5, criteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 20, 0.03))
 
-    points_detected_op ,status , _ = cv2.calcOpticalFlowPyrLK(prev_frame_gray,frame_gray,points_detected_prev,None,**lk_params)
+    points_detected_op ,status , _ = cv2.calcOpticalFlowPyrLK(prev_frame_gray,frame_gray,points_arr,None,**lk_params)
 
     points_detected_op = np.array(points_detected_op,dtype = np.float32).reshape(68,2)
 
@@ -91,7 +93,8 @@ while True:
 
     fps = cv2.getTickFrequency()/(cv2.getTickCount() - start_time)
     cv2.putText(frame,"FPS : {:.3f}".format(fps),(10,25),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,0,255),2,cv2.LINE_AA)
-    points_detected_prev = points.copy()
+    points_arr = points.copy()
+    points_detected_prev = points_detected_curr.copy()
     prev_frame_gray = frame_gray.copy()
     frame_num += 1
     cv2.imshow("Frame",frame)
